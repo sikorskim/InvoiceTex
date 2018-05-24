@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Settings>
+  <Company Id="1" FullName="Computerman Maciej Sikorski" Name="Computerman" NIP="7851769827" REGON="380018244" Street="Leśna" BuldingNo="15" PostalCode="63-100" City="Śrem" Email="biuro@computerman.pl" Phone="796 655 550" Website="www.computerman.pl" BankName="PKO BP S.A." BankAccount="05 1020 4160 0000 2902 0207 5596" IssuerName="Maciej Sikorski"></Company>
+  <Contractors>
+    <Contractor Id="1" FullName="Studio Reklamy JAG Jarosław Gadziński" NIP="7851769827" Street="Wojciechowskiego" BuldingNo="7" PostalCode="63-100" City="Śrem"></Contractor>
+    <Contractor Id="2" FullName="Medeus Sp. z o.o. Sp.k." NIP="7851769827" Street="Kórnicka" BuldingNo="7" PostalCode="63-100" City="Poznań"></Contractor>
+  </Contractors>
+  <PaymentMethods>
+    <PaymentMethod Id="1" Name="przelew 7 dni" DueDate="7"></PaymentMethod>
+    <PaymentMethod Id="2" Name ="gotówka" DueDate="0"></PaymentMethod>
+  </PaymentMethods>
+  <UnitOfMeasures>
+    <UnitOfMeasure Id="3" Name="sztuka" ShortName="szt."></UnitOfMeasure>
+    <UnitOfMeasure Id="4" Name="godzina" ShortName="h"></UnitOfMeasure>
+  </UnitOfMeasures>
+  <Items>
+    <Item Id="1" Name="usługa informatyczna" UnitOfMeasureId="1" UnitPrice="100,00" VATRate="23,00"></Item>
+    <Item Id="2" Name="konfiguracja oprogramowania" UnitOfMeasureId="1" UnitPrice="120,00" VATRate="23,00"></Item>
+  </Items>
+</Settings>
