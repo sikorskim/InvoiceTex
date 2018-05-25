@@ -48,9 +48,9 @@
   <SellerBuyer>
     \noindent
     \textbf~^SPRZEDAWCA^~						\hfill \textbf~^NABYWCA^~\\
-    {0}					                        \hfill {0}\\
-    {1}								            \hfill {1}\\
-    NIP {2}								        \hfill NIP {2}\\
+    {0}					                        \hfill {3}\\
+    {1}								            \hfill {4}\\
+    NIP {2}								        \hfill NIP {5}\\
   </SellerBuyer>
   <Recipient>
     \begin~^flushright^~

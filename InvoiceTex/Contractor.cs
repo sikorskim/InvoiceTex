@@ -15,5 +15,10 @@ namespace InvoiceTex
         public string Street { get; set; }
         public string BuldingNo { get; set; }
         public string PostalCode { get; set; }
+
+        public string FullAddress
+        {
+            get { return "ul. " + Street + " " + BuldingNo + ", " + PostalCode + " " + City; }
+        }
     }
-}
+    }

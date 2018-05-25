@@ -70,8 +70,13 @@ namespace InvoiceTex
             string issuer = root.Element("Issuer").Value;
             issuer = string.Format(issuer, settings.Company.IssuerName);
 
+            string sellerBuyer = root.Element("SellerBuyer").Value;
+            sellerBuyer = string.Format(sellerBuyer, settings.Company.FullName,settings.Company.FullAddress, settings.Company.NIP, settings.Contractors.FirstOrDefault().FullName, settings.Contractors.FirstOrDefault().FullAddress, settings.Contractors.FirstOrDefault().NIP);
 
-            string output = header + datePlace + title +issuer;
+            string invoiceItem = root.Element("InvoiceItem").Value;
+            invoiceItem = string.Format(invoiceItem, "1", settings.Items.FirstOrDefault().Name, settings.Items.FirstOrDefault().UnitOfMeasure, "1", settings.Items.FirstOrDefault().UnitPrice, settings.Items.FirstOrDefault().UnitPrice, settings.Items.FirstOrDefault().VatRate, "23,00", "123,00");
+            
+            string output = header + datePlace + title +sellerBuyer+invoiceItem+issuer;
             output = output.Replace("~^~^", "{{");
             output = output.Replace("^~^~", "}}");
             output =output.Replace("~^", "{");
