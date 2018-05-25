@@ -35,6 +35,7 @@ namespace InvoiceTex
                 XElement elemContractors = doc.Element("Settings").Element("Contractors");
                 XElement elemPaymentMethods = doc.Element("Settings").Element("PaymentMethods");
                 XElement elemUnitOfMeasures = doc.Element("Settings").Element("UnitOfMeasures");
+            XElement elemItems = doc.Element("Settings").Element("Items");
 
                 Company.Id = Int32.Parse(elemCompany.Attribute("Id").Value);
                 Company.FullName = elemCompany.Attribute("FullName").Value;
@@ -56,13 +57,13 @@ namespace InvoiceTex
                 foreach (XElement xContractor in elemContractors.Elements("Contractor"))
                 {
                     Contractor contractor = new Contractor();
-                    contractor.Id = Int32.Parse(elemCompany.Attribute("Id").Value);
-                    contractor.FullName = elemCompany.Attribute("FullName").Value;
-                    contractor.NIP = elemCompany.Attribute("NIP").Value;
-                    contractor.Street = elemCompany.Attribute("Street").Value;
-                    contractor.BuldingNo = elemCompany.Attribute("BuldingNo").Value;
-                    contractor.PostalCode = elemCompany.Attribute("PostalCode").Value;
-                    contractor.City = elemCompany.Attribute("City").Value;
+                    contractor.Id = Int32.Parse(xContractor.Attribute("Id").Value);
+                    contractor.FullName = xContractor.Attribute("FullName").Value;
+                    contractor.NIP = xContractor.Attribute("NIP").Value;
+                    contractor.Street = xContractor.Attribute("Street").Value;
+                    contractor.BuldingNo = xContractor.Attribute("BuldingNo").Value;
+                    contractor.PostalCode = xContractor.Attribute("PostalCode").Value;
+                    contractor.City = xContractor.Attribute("City").Value;
                     Contractors.Add(contractor);
                 }
 
@@ -83,6 +84,17 @@ namespace InvoiceTex
                     unitOfMeasure.ShortName = xUnitOfMeasures.Attribute("ShortName").Value;
                     UnitOfMeasures.Add(unitOfMeasure);
                 }
+
+            foreach (XElement xItems in elemItems.Elements("Item"))
+            {
+                Item item = new Item();
+                item.Id = Int32.Parse(xItems.Attribute("Id").Value);
+                item.Name = xItems.Attribute("Name").Value;
+                //item.UnitOfMeasure =;
+                item.UnitPrice = Decimal.Parse(xItems.Attribute("UnitPrice").Value);
+                item.VatRate = Decimal.Parse(xItems.Attribute("VATRate").Value);
+                Items.Add(item);
+            }
             //}
             //catch (Exception)
             //{
