@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
@@ -82,6 +84,25 @@ namespace InvoiceTex
             output =output.Replace("~^", "{");
             output=output.Replace("^~", "}");
             File.WriteAllText("out.tex", output);
+
+            Process process = new Process();
+            process.StartInfo.FileName = "pdflatex";
+            process.StartInfo.Arguments = "out.tex";
+            process.Start();
+            process.Dispose();
+            // wait to avoid System.ComponentModel.Win32Exception: 'The system cannot find the file specified' for out.pdf file
+            Thread.Sleep(1000);
+            openPdf();
+        }
+
+        void openPdf()
+        {
+            Process.Start(@"out.pdf");
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
