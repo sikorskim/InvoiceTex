@@ -24,6 +24,7 @@ namespace InvoiceTex
         }
 
         Settings settings;
+        List<InvoiceItem> invoiceItems;
 
         void startup()
         {
@@ -43,6 +44,10 @@ namespace InvoiceTex
             comboBox3.DataSource = settings.Items;
             comboBox3.DisplayMember = "Name";
             comboBox3.ValueMember = "Id";
+
+            invoiceItems = new List<InvoiceItem>();
+
+            textBox2.Text = Invoice.getNumber();
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -51,6 +56,11 @@ namespace InvoiceTex
         }
 
         private void button5_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        void generateInvoiceTest()
         {
             string path = "invoiceTemplate.xml";
             XDocument doc = XDocument.Load(path);
@@ -73,16 +83,30 @@ namespace InvoiceTex
             issuer = string.Format(issuer, settings.Company.IssuerName);
 
             string sellerBuyer = root.Element("SellerBuyer").Value;
-            sellerBuyer = string.Format(sellerBuyer, settings.Company.FullName,settings.Company.FullAddress, settings.Company.NIP, settings.Contractors.FirstOrDefault().FullName, settings.Contractors.FirstOrDefault().FullAddress, settings.Contractors.FirstOrDefault().NIP);
+            sellerBuyer = string.Format(sellerBuyer, settings.Company.FullName, settings.Company.FullAddress, settings.Company.NIP, settings.Contractors.FirstOrDefault().FullName, settings.Contractors.FirstOrDefault().FullAddress, settings.Contractors.FirstOrDefault().NIP);
 
+            string invoiceItemsTableHeader = root.Element("InvoiceItemsTableHeader").Value;
+            string invoiceItemsSummary = root.Element("InvoiceItemTableSummary").Value;
             string invoiceItem = root.Element("InvoiceItem").Value;
             invoiceItem = string.Format(invoiceItem, "1", settings.Items.FirstOrDefault().Name, settings.Items.FirstOrDefault().UnitOfMeasure, "1", settings.Items.FirstOrDefault().UnitPrice, settings.Items.FirstOrDefault().UnitPrice, settings.Items.FirstOrDefault().VatRate, "23,00", "123,00");
-            
-            string output = header + datePlace + title +sellerBuyer+invoiceItem+issuer;
+
+            string taxTableHeader = root.Element("TaxTableHeader").Value;
+            string tax = root.Element("Tax").Value;
+            string taxTableSummary = root.Element("TaxTableSummary").Value;
+            string taxTable = taxTableHeader + tax + taxTableSummary;
+
+            string priceSummary = root.Element("PriceSummary").Value;
+            string paymentMethod = root.Element("PaymentMethod").Value;
+
+            string output = header + datePlace + title + sellerBuyer + invoiceItemsTableHeader + invoiceItem + invoiceItemsSummary + taxTable + priceSummary + paymentMethod + issuer;
+
+
+
+
             output = output.Replace("~^~^", "{{");
             output = output.Replace("^~^~", "}}");
-            output =output.Replace("~^", "{");
-            output=output.Replace("^~", "}");
+            output = output.Replace("~^", "{");
+            output = output.Replace("^~", "}");
             File.WriteAllText("out.tex", output);
 
             Process process = new Process();
@@ -100,9 +124,40 @@ namespace InvoiceTex
             Process.Start(@"out.pdf");
         }
 
+        void addInvoiceItem()
+        {
+            dataGridView1.DataSource = null;
+            InvoiceItem invoiceItem = new InvoiceItem();
+            invoiceItem.Item = (Item)comboBox3.SelectedItem;
+            invoiceItem.Quantity = (int)numericUpDown1.Value;
+
+            invoiceItems.Add(invoiceItem);
+            dataGridView1.DataSource = invoiceItems;
+
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
+            addInvoiceItem();
+        }
 
+        void generateInvoice()
+        {
+            Invoice invoice = new Invoice();
+            invoice.Company = settings.Company;
+            invoice.Contractor = (Contractor)comboBox1.SelectedItem;
+            invoice.DateOfIssue = dateTimePicker1.Value;
+            invoice.DateOfDelivery = dateTimePicker2.Value;
+            invoice.IssuePlace = textBox1.Text;
+            invoice.Number = textBox2.Text;
+            invoice.PaymentMethod = (PaymentMethod)comboBox2.SelectedItem;
+            invoice.InvoiceItems = invoiceItems;
+            invoice.generate();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            generateInvoice();
         }
     }
 }
