@@ -22,7 +22,7 @@ namespace InvoiceTex
 
         public static string getNumber()
         {
-            return "FV/" + DateTime.Now.Year + "/" + DateTime.Now.Month + "/1";
+            return "FV/" + DateTime.Now.Year + "/" + DateTime.Now.Month + "/";
         }
 
         public void generate()
@@ -65,17 +65,18 @@ namespace InvoiceTex
                 totalValueNetto += item.ValueNetto;
                 totalValueBrutto += item.ValueBrutto;
             }
+            invoiceItemsSummary = string.Format(invoiceItemsSummary, totalVATValue, totalValueNetto, totalValueBrutto);
             invoiceItemsTable += invoiceItemsSummary;
 
             string taxTableHeader = root.Element("TaxTableHeader").Value;
             string tax = root.Element("Tax").Value;
-            string taxTableSummary = root.Element("TaxTableSummary").Value;
-            taxTableSummary = string.Format(taxTableSummary,totalVATValue,totalValueNetto,totalValueBrutto);
+            string taxTableSummary = root.Element("TaxTableSummary").Value;            
             string taxTable = taxTableHeader + tax + taxTableSummary;
 
             string priceSummary = root.Element("PriceSummary").Value;
             priceSummary = string.Format(priceSummary, totalValueBrutto,"słownie złotych", "groszy");
             string paymentMethod = root.Element("PaymentMethod").Value;
+            paymentMethod = string.Format(paymentMethod, PaymentMethod.Name, DateOfIssue.AddDays(PaymentMethod.DueDate).ToShortDateString());
             string issuer = root.Element("Issuer").Value;
             issuer = string.Format(issuer, Company.IssuerName);
             string footer = paymentMethod + issuer;

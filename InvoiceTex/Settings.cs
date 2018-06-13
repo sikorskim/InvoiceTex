@@ -7,7 +7,7 @@ using System.Xml.Linq;
 
 namespace InvoiceTex
 {
-    class Settings
+    public class Settings
     {
         public Company Company { get; set; }
         public List<Contractor> Contractors { get; set; }

@@ -48,6 +48,13 @@ namespace InvoiceTex
             invoiceItems = new List<InvoiceItem>();
 
             textBox2.Text = Invoice.getNumber();
+
+            dateTimePicker1.Format = DateTimePickerFormat.Custom;
+            dateTimePicker1.CustomFormat = "yyyy-MM-dd";
+            dateTimePicker2.Format = DateTimePickerFormat.Custom;
+            dateTimePicker2.CustomFormat = "yyyy-MM-dd";
+
+
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -167,7 +174,7 @@ namespace InvoiceTex
 
         private void ustawieniaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FrmSettings frmSettings = new FrmSettings();
+            FrmSettings frmSettings = new FrmSettings(settings);
             frmSettings.Show();
         }
     }

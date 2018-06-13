@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace InvoiceTex
 {
-    class Contractor
+    public class Contractor
     {
         public int Id { get; set; }
         public string NIP { get; set; }

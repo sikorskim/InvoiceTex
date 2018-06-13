@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace InvoiceTex
 {
-    class UnitOfMeasure
+    public class UnitOfMeasure
     {
         public int Id { get; set; }
         public string Name { get; set; }
