@@ -132,7 +132,7 @@ namespace InvoiceTex
             invoiceItem.Quantity = (int)numericUpDown1.Value;
 
             invoiceItems.Add(invoiceItem);
-            dataGridView1.DataSource = invoiceItems;
+            dataGridView1.DataSource = invoiceItems;            
 
         }
 
@@ -158,6 +158,17 @@ namespace InvoiceTex
         private void button2_Click(object sender, EventArgs e)
         {
             generateInvoice();
+        }
+
+        private void zakończToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Dispose();
+        }
+
+        private void ustawieniaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmSettings frmSettings = new FrmSettings();
+            frmSettings.Show();
         }
     }
 }

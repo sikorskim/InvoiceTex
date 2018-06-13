@@ -50,21 +50,31 @@ namespace InvoiceTex
             string invoiceItemsTable = root.Element("InvoiceItemsTableHeader").Value;
             string invoiceItemsSummary = root.Element("InvoiceItemTableSummary").Value;
             string invoiceItem = root.Element("InvoiceItem").Value;
+
+            decimal totalVATValue = 0;
+            decimal totalValueNetto = 0;
+            decimal totalValueBrutto = 0;
             int i = 1;
             foreach (InvoiceItem item in InvoiceItems)
             {
-                invoiceItem = string.Format(invoiceItem, i, item.Item.Name, item.Item.UnitOfMeasure, item.Quantity, item.Item.UnitPrice, item.Item.UnitPrice, item.Item.VatRate, item.VATValue, item.ValueBrutto);
-                invoiceItemsTable += invoiceItem;
+                string newItem = string.Format(invoiceItem, i, item.Item.Name, item.Item.UnitOfMeasure, item.Quantity, item.Item.UnitPrice, item.Item.UnitPrice, item.Item.VatRate, item.VATValue, item.ValueBrutto);
+                Console.WriteLine(newItem);
+                invoiceItemsTable +=newItem;
                 i++;
+                totalVATValue += item.VATValue;
+                totalValueNetto += item.ValueNetto;
+                totalValueBrutto += item.ValueBrutto;
             }
             invoiceItemsTable += invoiceItemsSummary;
 
             string taxTableHeader = root.Element("TaxTableHeader").Value;
             string tax = root.Element("Tax").Value;
             string taxTableSummary = root.Element("TaxTableSummary").Value;
+            taxTableSummary = string.Format(taxTableSummary,totalVATValue,totalValueNetto,totalValueBrutto);
             string taxTable = taxTableHeader + tax + taxTableSummary;
 
             string priceSummary = root.Element("PriceSummary").Value;
+            priceSummary = string.Format(priceSummary, totalValueBrutto,"słownie złotych", "groszy");
             string paymentMethod = root.Element("PaymentMethod").Value;
             string issuer = root.Element("Issuer").Value;
             issuer = string.Format(issuer, Company.IssuerName);
@@ -79,10 +89,10 @@ namespace InvoiceTex
             output = output.Replace("^~", "}");
             File.WriteAllText("out.tex", output);
 
-            Process process = new Process();
-            process.StartInfo.FileName = "pdflatex";
-            process.StartInfo.Arguments = "out.tex";
-            process.Start();
+            //Process process = new Process();
+            //process.StartInfo.FileName = "pdflatex";
+            //process.StartInfo.Arguments = "out.tex";
+            //process.Start();
             //process.Dispose();
         }
     }
