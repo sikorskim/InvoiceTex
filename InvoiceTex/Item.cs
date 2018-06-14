@@ -13,7 +13,5 @@ namespace InvoiceTex
         public UnitOfMeasure UnitOfMeasure { get; set; }
         public decimal UnitPrice { get; set; }
         public decimal VatRate { get; set; }
-
-
     }
 }

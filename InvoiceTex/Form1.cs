@@ -64,7 +64,8 @@ namespace InvoiceTex
 
         private void button5_Click(object sender, EventArgs e)
         {
-
+            FrmTest frmTest = new FrmTest();
+            frmTest.Show();
         }
 
         void generateInvoiceTest()
