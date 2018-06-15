@@ -24,7 +24,14 @@ namespace InvoiceTex
 
         private void button1_Click(object sender, EventArgs e)
         {
-            string inputString = textBox1.Text;
+            decimal d = 0;
+            decimal.TryParse(textBox1.Text, out d);
+            getValueInWords(d);
+        }
+
+        void getValueInWords(decimal d)
+        {
+            string inputString = d.ToString("0.00");
             string[] parts;
             int i1;
             int i2;
@@ -47,54 +54,118 @@ namespace InvoiceTex
 
             string valueInWords = "";
 
-            string[] ones = { "jeden", "dwa", "trzy", "cztery", "pięć", "sześć", "siedem", "osiem", "dziewięć" };
-            string[] teens = { "dziesięć", "jedenaście", "dwanaście", "trzynaście", "czternaście", "piętnaście", "szesnaście", "siedemnaście", "osiemanście", "dziewiętnaście" };
-            string[] doubles = { "dwadzieścia", "trzydzieści", "czterdzieści", "pięćdziesiąt", "sześćdziesiąt", "siedemdziesiąt", "osiemdziesiąt", "dziewięćdziesiąt" };
-            string[] triplets = { "sto", "dwieście", "trzysta", "czterysta", "pięćset", "sześćset", "siedemset", "osiemset", "dziewięćset" };
-            string[] thousands = { "tysiąc", "tysięcy" };
-            string[] millions = { "milion", "milionów" };
-
-            if (i1 > 0 && i1 <= 9)
+            if (i1 >= 1 && i1 <= 9)
             {
-                valueInWords = ones[i1 - 1];
+                valueInWords = getOnes(i1);
             }
             else if (i1 >= 10 && i1 <= 19)
             {
-                valueInWords = teens[i1 - 10];
+                valueInWords = getTeens(i1);
             }
             else if (i1 >= 20 && i1 <= 99)
             {
-                valueInWords = doubles[i1 / 10 - 2];
-
-                int i11 = i1 % 10;
-                if (i11 != 0)
-                {
-                    valueInWords += " " + ones[i11 - 1];
-                }
+                valueInWords = getDoubles(i1);
             }
             else if (i1 >= 100 && i1 <= 999)
             {
-                valueInWords = triplets[i1 / 100 - 1];
+                valueInWords = getTriplets(i1);
+            }
+            else if (i1 >= 1000 && i1 <= 99999)
+            {
+                valueInWords = getThousands(i1);
+            }
 
-                int i11 = i1 % 100;
-                if (i11 != 0)
+            textBox5.Text = valueInWords;
+        }
+
+        string getOnes(int i)
+        {
+            string[] ones = { "jeden", "dwa", "trzy", "cztery", "pięć", "sześć", "siedem", "osiem", "dziewięć" };
+            return ones[i - 1];
+        }
+
+        string getTeens(int i)
+        {
+            string[] teens = { "dziesięć", "jedenaście", "dwanaście", "trzynaście", "czternaście", "piętnaście", "szesnaście", "siedemnaście", "osiemanście", "dziewiętnaście" };
+            return teens[i - 10];
+        }
+
+        string getDoubles(int i)
+        {
+            string[] doubles = { "dwadzieścia", "trzydzieści", "czterdzieści", "pięćdziesiąt", "sześćdziesiąt", "siedemdziesiąt", "osiemdziesiąt", "dziewięćdziesiąt" };
+            string output = doubles[i / 10 - 2];
+            int i1 = i % 10;
+            if (i1 != 0)
+            {
+                output += " " + getOnes(i1);
+            }
+
+            return output;
+        }
+
+        string getTriplets(int i)
+        {
+            string[] triplets = { "sto", "dwieście", "trzysta", "czterysta", "pięćset", "sześćset", "siedemset", "osiemset", "dziewięćset" };
+            string output = triplets[i / 100 - 1];
+            int i1 = i % 100;
+            if (i1 != 0)
+            {
+                if (i1 >= 10 && i1 <= 19)
                 {
-                    if (i11 >= 10 && i11 <= 19)
-                    {
-                        valueInWords += " "+ teens[i11 - 10];
-                    }
-                    if (i11 >= 20 && i11 <= 99)
-                    {
-                        valueInWords += " " + doubles[i11 / 10 - 2];
+                    output += " " + getTeens(i1);
+                }
+                if (i1 >= 20 && i1 <= 99)
+                {
+                    output += " " + getDoubles(i1);
+                }
+            }
+            return output;
+        }
 
-                        int i111 = i11 % 10;
-                        if (i111 != 0)
-                        {
-                            valueInWords += " " + ones[i111 - 1];
-                        }
-                    }
-                }           
-                textBox5.Text = valueInWords;
+        string getThousands(int i)
+        {
+            string[] thousands = { "tysiąc", "tysiące", "tysięcy" };
+            string output = "";
+            int i1 = i / 1000;
+            if (i1 == 1)
+            {
+                output = thousands[0];
+            }
+            else if (i1 >= 2 && i1 <= 4)
+            {
+                output = getOnes(i1) + " " + thousands[1];
+            }
+            else if (i1 >= 5 && i1 <= 9)
+            {
+                output = getOnes(i1) + " " + thousands[2];
+            }
+            else if (i1 >= 10 && i1 <= 19)
+            {
+                output = getTeens(i1) + " " + thousands[2];
+            }
+            else if (i1 >= 20 && i1 <= 99)
+            {
+                output = getDoubles(i1);
+                int i2 = Int32.Parse(i1.ToString()[1].ToString());
+                if (i2 >= 2 && i2 <= 4)
+                {
+                    output += " " + thousands[1];
+                }
+                else
+                {
+                    output += " " + thousands[2];
+                }
+            }
+            return output;
+        }
+
+        private void textBox1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                decimal d = 0;
+                decimal.TryParse(textBox1.Text, out d);
+                getValueInWords(d);
             }
         }
     }
